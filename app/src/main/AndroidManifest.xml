@@ -45,7 +45,10 @@
             </intent-filter>
         </receiver>
         <service android:name="com.google.android.gms.analytics.CampaignTrackingService" />
-
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="5395e27c16cf64defb13ee6f861572de44d70050"
+            />
     </application>
 
 </manifest>
