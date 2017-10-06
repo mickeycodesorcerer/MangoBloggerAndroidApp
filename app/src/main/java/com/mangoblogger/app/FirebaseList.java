@@ -44,7 +44,7 @@ public class FirebaseList extends Fragment {
 
 
     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    Firebase ref = new Firebase("https://fir-test-51eed.firebaseio.com/Blogger"); /* connect to firebase*/
+    Firebase ref = new Firebase("https://mangoblogger-9ffff.firebaseio.com/Blogger"); /* connect to firebase*/
 
     private int lastPoistion;
     private String blog = "blog";
