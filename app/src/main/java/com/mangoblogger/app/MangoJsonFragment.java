@@ -1,18 +1,19 @@
 package com.mangoblogger.app;
 
+
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
-
 import com.mangoblogger.app.Interface.ApiInterface;
-import com.mangoblogger.app.api_model.AttachmentModel;
 import com.mangoblogger.app.api_model.UXPostsModel;
 import com.mangoblogger.app.api_model.UxApiModel;
 
@@ -24,35 +25,40 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-/*  this class is entry point for wp rest api */
 
 /**
- *  I am using retrofit and what ever library you used it does'nt make large difference so model will be same
- * */
+ * A simple {@link Fragment} subclass.
+ */
+public class MangoJsonFragment extends Fragment {
 
-public class MangoJson extends AppCompatActivity {
 
-     RecyclerView recyclerView;
+    RecyclerView recyclerView;
     MangoJsonAdapter jsonAdapter;
-     Retrofit retrofit;
+    Retrofit retrofit;
     private final String BASE_URL = "https://www.mangoblogger.com";
     ApiInterface apiInterface;
     ImageView image;
 
-    public static MangoJson newInstance() {
-        MangoJson mangoJson = new MangoJson();
+    public static MangoJsonFragment newInstance() {
+        MangoJsonFragment mangoJson = new MangoJsonFragment();
         return mangoJson;
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mango_json);
+    public MangoJsonFragment() {
 
-        image = (ImageView) findViewById(R.id.image);
-        recyclerView = (RecyclerView) findViewById(R.id.mango_json_recyclerview);
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_mango_json, container, false);
+
+        //image = (ImageView) view.findViewById(R.id.image);
+        recyclerView = (RecyclerView) view.findViewById(R.id.mango_json_recyclerview);
         recyclerView.addItemDecoration(new GridSpacing(5));
-        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(),1));
+        recyclerView.setLayoutManager(new GridLayoutManager(getActivity(),1));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -62,9 +68,9 @@ public class MangoJson extends AppCompatActivity {
         apiInterface.getUxTerms("ux_term",1).enqueue(new Callback<UxApiModel>() {
             @Override
             public void onResponse(Call<UxApiModel> call, Response<UxApiModel> response) {
-               List<UXPostsModel> uxPostsModelList =  response.body().getPosts();
+                List<UXPostsModel> uxPostsModelList =  response.body().getPosts();
                 if (uxPostsModelList != null) {
-                    jsonAdapter = new MangoJsonAdapter(getApplicationContext(), uxPostsModelList);
+                    jsonAdapter = new MangoJsonAdapter(getActivity(), uxPostsModelList);
                     recyclerView.setAdapter(jsonAdapter);
 
                 }
@@ -77,11 +83,12 @@ public class MangoJson extends AppCompatActivity {
                 Log.e("My TAG", "there is something error"+t.getMessage());
             }
         });
+        return view;
     }
 
-   /**
-    * Grid spacng in recyclerview to make a proper distance between items
-    * */
+    /**
+     * Grid spacng in recyclerview to make a proper distance between items
+     * */
     class GridSpacing extends RecyclerView.ItemDecoration {
         int spacing;
         int span;
@@ -98,4 +105,5 @@ public class MangoJson extends AppCompatActivity {
             outRect.bottom=spacing;
         }
     }
+
 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.CheckableImageButton;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements CheckNetworkReceiver.OnNetworkConnection {
     private static final String ANALYTICS_URL_KEY = "analytics_url"; // value must be equal to parameter in firebase remote config
     private static final String UXTERMS_URL_KEY = "uxterms_url"; // value must be equal to parameter in firebase remote config
     public static final String ABOUT_KEY = "about";
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private String mAddress;
     private String mGeoLatitude;
     private String mGeoLongitude;
+    private CheckNetworkReceiver checkNetworkReceiver = new CheckNetworkReceiver();
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -90,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_firebaseList :
                     mViewPager.setCurrentItem(3);
-                    setAnalyticsScreenName("Firebase List", FirebaseList.class.getName());
+                    setAnalyticsScreenName("Firebase List", MangoJsonFragment.class.getName());
                     return true;
 
             }
@@ -107,8 +109,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initViewPager();
 
-
-
+        /* check for internet connection */
+           checkNetworkReceiver.setOnNetworkConnection(this);
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.setAnalyticsCollectionEnabled(true);
@@ -211,7 +213,7 @@ public class MainActivity extends AppCompatActivity {
         mPagerAdapter.addFragment(WebFragment.newInstance(mUxtermsUrl, "Ux Terms"), "Ux Terms");
         mPagerAdapter.addFragment(AboutFragment.newInstance(mAbout, mCountryCode, mContactNumber, mAddress,
                 mGeoLatitude, mGeoLongitude), "About");
-       mPagerAdapter.addFragment(FirebaseList.newInstance(), "Firebase List");
+       mPagerAdapter.addFragment(MangoJsonFragment.newInstance(), "Firebase List");
 
         mViewPager.setAdapter(mPagerAdapter);
 
@@ -261,6 +263,16 @@ public class MainActivity extends AppCompatActivity {
             Snackbar.make(mCoordinator, R.string.offline_notice, Snackbar.LENGTH_LONG).show();
         }
     }
+
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        if (isConnected)
+            Toast.makeText(MainActivity.this, "Internet is connected", Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(MainActivity.this, "Internet is not connected", Toast.LENGTH_SHORT).show();
+
+    }
+
 
 
 
