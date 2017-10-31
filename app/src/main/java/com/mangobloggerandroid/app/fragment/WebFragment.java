@@ -24,6 +24,7 @@ import static android.view.View.VISIBLE;
 
 /**
  * Created by ujjawal on 9/10/17.
+ *
  */
 
 @SuppressLint("SetJavaScriptEnabled")

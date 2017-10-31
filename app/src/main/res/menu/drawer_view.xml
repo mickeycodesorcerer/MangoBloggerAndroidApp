@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
-        <item
+       <!-- <item
             android:id="@+id/nav_home"
             android:icon="@mipmap/ic_dashboard"
             android:title="Home" />
@@ -16,13 +16,13 @@
         <item
             android:id="@+id/nav_friends"
             android:icon="@mipmap/ic_headset"
-            android:title="Friends" />
+            android:title="Friends" />-->
 
     </group>
 
     <item android:title="Communicate">
         <menu>
-            <item
+            <!--<item
                 android:icon="@mipmap/ic_dashboard"
                 android:title="Talent Coaching Centre"
                 android:id="@+id/nav_about"/>
@@ -33,7 +33,7 @@
             <item
                 android:icon="@mipmap/ic_forum"
                 android:title="Contact Us"
-                android:id="@+id/nav_contact"/>
+                android:id="@+id/nav_contact"/>-->
         </menu>
     </item>
 </menu>
