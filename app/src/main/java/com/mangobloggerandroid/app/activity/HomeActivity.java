@@ -8,6 +8,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -70,6 +72,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
     private ImageView mToolbarLogo;
     private MenuItem mNotificationMenuItem;
     private BottomNavigationView mNavigation;
+    private ImageButton mNavigationImageButton;
 
 
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
@@ -243,6 +246,7 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        mNavigationImageButton = getNavButtonView(mToolbar);
     }
 
     @Override
@@ -323,21 +327,25 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
         int actionbarSize = AppUtils.dpToPx(56);
         mToolbar.setTranslationY(-actionbarSize);
         mToolbarLogo.setTranslationY(-actionbarSize);
-
-            mNotificationMenuItem.getActionView().setTranslationY(-actionbarSize);
+        mNotificationMenuItem.getActionView().setTranslationY(-actionbarSize);
+        mNavigationImageButton.setTranslationY(-actionbarSize);
 
             mToolbar.animate()
                     .translationY(0)
                     .setDuration(ANIM_DURATION_TOOLBAR)
                     .setStartDelay(300);
-            mToolbarLogo.animate()
+            mNavigationImageButton.animate()
                     .translationY(0)
                     .setDuration(ANIM_DURATION_TOOLBAR)
                     .setStartDelay(400);
+            mToolbarLogo.animate()
+                    .translationY(0)
+                    .setDuration(ANIM_DURATION_TOOLBAR)
+                    .setStartDelay(500);
             mNotificationMenuItem.getActionView().animate()
                     .translationY(0)
                     .setDuration(ANIM_DURATION_TOOLBAR)
-                    .setStartDelay(500)
+                    .setStartDelay(600)
                     .setListener(new AnimatorListenerAdapter() {
                         @Override
                         public void onAnimationEnd(Animator animation) {
@@ -396,6 +404,21 @@ public class HomeActivity extends AppCompatActivity implements NavigationView.On
                 DataLayer.mapOf(
                         "screen-name","AboutPage"
                 ));
+    }
+
+    /**
+     * Get toolbar's navigation icon view reference.
+     *
+     * @param toolbar the main {@link Toolbar}.
+     * @return a {@link ImageButton} reference.
+     */
+    @Nullable
+    private ImageButton getNavButtonView(Toolbar toolbar) {
+        for (int i = 0; i < toolbar.getChildCount(); i++)
+            if(toolbar.getChildAt(i) instanceof ImageButton)
+                return (ImageButton) toolbar.getChildAt(i);
+
+        return null;
     }
 
 }
